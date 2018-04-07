@@ -45,5 +45,11 @@
 			<artifactId>aws-java-sdk-s3</artifactId>
 			<version>1.11.306</version>
 		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.12</version>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 </project>

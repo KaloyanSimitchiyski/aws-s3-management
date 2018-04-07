@@ -1,22 +1,36 @@
-package bg.uni.sofia.fmi.aws.s3.management.rest.impl;
+package bg.uni.sofia.fmi.aws.s3.management.api;
+
+import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
+import static javax.ws.rs.core.MediaType.APPLICATION_OCTET_STREAM;
+import static javax.ws.rs.core.MediaType.MULTIPART_FORM_DATA;
 
 import java.io.InputStream;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
 import javax.ws.rs.NotFoundException;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
+import org.glassfish.jersey.media.multipart.FormDataParam;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.services.s3.model.S3ObjectSummary;
 
-import bg.uni.sofia.fmi.aws.s3.management.rest.IObjectManagementApi;
+import bg.uni.sofia.fmi.aws.s3.management.env.EnvironmentVariable;
+import bg.uni.sofia.fmi.aws.s3.management.env.EnvironmentVariableReader;
 
-public class ObjectManagementApi implements IObjectManagementApi {
+@Path("objects")
+public class ObjectManagementApi {
 
 	private final AmazonS3 client;
 
@@ -24,16 +38,21 @@ public class ObjectManagementApi implements IObjectManagementApi {
 		this.client = client;
 	}
 
-	@Override
-	public Response download(String bucket, String object) {
+	@GET
+	@Path("{bucket}/{object}")
+	@Produces(APPLICATION_OCTET_STREAM)
+	Response download(@PathParam("bucket") String bucket, @PathParam("object") String object) {
 		assertExistingObject(bucket, object);
 
 		S3Object s3Object = client.getObject(bucket, object);
 		return Response.ok().entity(s3Object.getObjectContent()).build();
 	}
 
-	@Override
-	public Response getFileList(String bucket) {
+	@GET
+	@Path("{bucket}")
+	@Produces(APPLICATION_JSON)
+	Response getFileList(@PathParam("bucket") String bucket) {
+		EnvironmentVariableReader.getVariable(EnvironmentVariable.AWS_REGION);
 		assertExistingBucket(bucket);
 
 		List<S3ObjectSummary> summaries = client.listObjects(bucket) //
@@ -45,8 +64,11 @@ public class ObjectManagementApi implements IObjectManagementApi {
 		return Response.ok().entity(objectNames).build();
 	}
 
-	@Override
-	public Response uploadFile(InputStream objectData, FormDataContentDisposition objectDetails, String bucket) {
+	@POST
+	@Path("{bucket}")
+	@Consumes(MULTIPART_FORM_DATA)
+	Response uploadFile(@FormDataParam("object") InputStream objectData,
+			@FormDataParam("object") FormDataContentDisposition objectDetails, @PathParam("bucket") String bucket) {
 		assertExistingBucket(bucket);
 
 		ObjectMetadata metadata = new ObjectMetadata();
@@ -56,8 +78,9 @@ public class ObjectManagementApi implements IObjectManagementApi {
 		return Response.ok().build();
 	}
 
-	@Override
-	public Response deleteFile(String bucket, String object) {
+	@DELETE
+	@Path("{bucket}/{object}")
+	Response deleteFile(@PathParam("bucket") String bucket, @PathParam("object") String object) {
 		assertExistingObject(bucket, object);
 
 		client.deleteObject(bucket, object);
