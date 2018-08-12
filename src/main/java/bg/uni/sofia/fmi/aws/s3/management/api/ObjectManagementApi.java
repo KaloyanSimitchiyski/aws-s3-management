@@ -1,5 +1,6 @@
 package bg.uni.sofia.fmi.aws.s3.management.api;
 
+import static bg.uni.sofia.fmi.aws.s3.management.api.Utils.buildAbsolutePath;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 import static javax.ws.rs.core.MediaType.APPLICATION_OCTET_STREAM;
 import static javax.ws.rs.core.MediaType.MULTIPART_FORM_DATA;
@@ -26,9 +27,6 @@ import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.services.s3.model.S3ObjectSummary;
 
-import bg.uni.sofia.fmi.aws.s3.management.env.EnvironmentVariable;
-import bg.uni.sofia.fmi.aws.s3.management.env.EnvironmentVariableReader;
-
 @Path("objects")
 public class ObjectManagementApi {
 
@@ -42,9 +40,10 @@ public class ObjectManagementApi {
 	@Path("{bucket}/{object}")
 	@Produces(APPLICATION_OCTET_STREAM)
 	Response download(@PathParam("bucket") String bucket, @PathParam("object") String object) {
-		assertExistingObject(bucket, object);
+		String absoluteBucket = buildExistingBucket(bucket);
+		assertExistingObject(absoluteBucket, object);
 
-		S3Object s3Object = client.getObject(bucket, object);
+		S3Object s3Object = client.getObject(absoluteBucket, object);
 		return Response.ok().entity(s3Object.getObjectContent()).build();
 	}
 
@@ -52,10 +51,9 @@ public class ObjectManagementApi {
 	@Path("{bucket}")
 	@Produces(APPLICATION_JSON)
 	Response getFileList(@PathParam("bucket") String bucket) {
-		EnvironmentVariableReader.getVariable(EnvironmentVariable.AWS_REGION);
-		assertExistingBucket(bucket);
+		String absoluteBucket = buildExistingBucket(bucket);
 
-		List<S3ObjectSummary> summaries = client.listObjects(bucket) //
+		List<S3ObjectSummary> summaries = client.listObjects(absoluteBucket) //
 				.getObjectSummaries();
 		List<String> objectNames = summaries.stream() //
 				.map(S3ObjectSummary::getKey) //
@@ -69,11 +67,11 @@ public class ObjectManagementApi {
 	@Consumes(MULTIPART_FORM_DATA)
 	Response uploadFile(@FormDataParam("object") InputStream objectData,
 			@FormDataParam("object") FormDataContentDisposition objectDetails, @PathParam("bucket") String bucket) {
-		assertExistingBucket(bucket);
+		String absoluteBucket = buildExistingBucket(bucket);
 
 		ObjectMetadata metadata = new ObjectMetadata();
 		metadata.setUserMetadata(objectDetails.getParameters());
-		client.putObject(bucket, objectDetails.getFileName(), objectData, metadata);
+		client.putObject(absoluteBucket, objectDetails.getFileName(), objectData, metadata);
 
 		return Response.ok().build();
 	}
@@ -81,16 +79,20 @@ public class ObjectManagementApi {
 	@DELETE
 	@Path("{bucket}/{object}")
 	Response deleteFile(@PathParam("bucket") String bucket, @PathParam("object") String object) {
-		assertExistingObject(bucket, object);
+		String absoluteBucket = buildExistingBucket(bucket);
+		assertExistingObject(absoluteBucket, object);
 
-		client.deleteObject(bucket, object);
+		client.deleteObject(absoluteBucket, object);
 		return Response.ok().build();
 	}
 
-	private void assertExistingBucket(String bucket) {
-		if (!client.doesBucketExistV2(bucket)) {
+	private String buildExistingBucket(String bucket) {
+		String absoluteBucket = buildAbsolutePath(bucket);
+		if (!client.doesBucketExistV2(absoluteBucket)) {
 			throw new NotFoundException();
 		}
+
+		return absoluteBucket;
 	}
 
 	private void assertExistingObject(String bucket, String object) {
