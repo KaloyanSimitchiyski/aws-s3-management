@@ -1,6 +1,6 @@
 package bg.uni.sofia.fmi.aws.s3.management.api;
 
-import static bg.uni.sofia.fmi.aws.s3.management.api.Utils.buildAbsolutePath;
+import static bg.uni.sofia.fmi.aws.s3.management.api.Utils.buildAbsoluteBucket;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 import static javax.ws.rs.core.MediaType.APPLICATION_OCTET_STREAM;
 import static javax.ws.rs.core.MediaType.MULTIPART_FORM_DATA;
@@ -87,7 +87,7 @@ public class ObjectManagementApi {
 	}
 
 	private String buildExistingBucket(String bucket) {
-		String absoluteBucket = buildAbsolutePath(bucket);
+		String absoluteBucket = buildAbsoluteBucket(bucket);
 		if (!client.doesBucketExistV2(absoluteBucket)) {
 			throw new NotFoundException();
 		}

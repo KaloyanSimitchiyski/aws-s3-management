@@ -1,6 +1,6 @@
 package bg.uni.sofia.fmi.aws.s3.management.api;
 
-import static bg.uni.sofia.fmi.aws.s3.management.api.Utils.buildAbsolutePath;
+import static bg.uni.sofia.fmi.aws.s3.management.api.Utils.buildAbsoluteBucket;
 
 import javax.ws.rs.BadRequestException;
 import javax.ws.rs.DELETE;
@@ -24,7 +24,7 @@ public class BucketManagementApi {
 	@POST
 	@Path("{bucket}")
 	public Response createBucket(@PathParam("bucket") String bucket) {
-		String absoluteBucket = buildAbsolutePath(bucket);
+		String absoluteBucket = buildAbsoluteBucket(bucket);
 		if (client.doesBucketExistV2(bucket)) {
 			throw new BadRequestException();
 		}
@@ -36,7 +36,7 @@ public class BucketManagementApi {
 	@DELETE
 	@Path("{bucket}")
 	public Response deleteEmptyBucket(@PathParam("bucket") String bucket) {
-		String absoluteBucket = buildAbsolutePath(bucket);
+		String absoluteBucket = buildAbsoluteBucket(bucket);
 		if (!client.doesBucketExistV2(absoluteBucket)) {
 			throw new NotFoundException();
 		}

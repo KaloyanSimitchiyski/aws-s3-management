@@ -6,7 +6,7 @@ public enum EnvironmentVariable {
 	AWS_REGION("AWS_REGION", true);
 
 	private final String key;
-	private boolean isMandatory;
+	private final boolean isMandatory;
 
 	private EnvironmentVariable(String key, boolean isMandatory) {
 		this.key = key;

@@ -6,7 +6,7 @@ import static java.lang.String.format;
 
 class Utils {
 
-	public static String buildAbsolutePath(String bucket) {
+	public static String buildAbsoluteBucket(String bucket) {
 		return format("%s/%s", readVariable(ROOT_BUCKET), bucket);
 	}
 }
