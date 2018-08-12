@@ -9,6 +9,6 @@ public class EnvironmentVariableReader {
 
 	public static String readVariable(EnvironmentVariable variable) {
 		return ofNullable(System.getenv(variable.getKey()))
-				.orElseThrow(() -> new IllegalArgumentException(format(NO_VALUE_FOUND_MESSAGE, variable.getKey())));
+				.orElseThrow(() -> new IllegalStateException(format(NO_VALUE_FOUND_MESSAGE, variable.getKey())));
 	}
 }
