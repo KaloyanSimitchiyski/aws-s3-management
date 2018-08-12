@@ -4,6 +4,7 @@ import static bg.uni.sofia.fmi.aws.s3.management.api.Utils.buildAbsoluteBucket;
 
 import javax.ws.rs.BadRequestException;
 import javax.ws.rs.DELETE;
+import javax.ws.rs.HEAD;
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -19,6 +20,17 @@ public class BucketManagementApi {
 
 	public BucketManagementApi(AmazonS3 client) {
 		this.client = client;
+	}
+
+	@HEAD
+	@Path("bucket")
+	public Response isExistingBucket(@PathParam("bucket") String bucket) {
+		String absoluteBucket = buildAbsoluteBucket(bucket);
+		if (!client.doesBucketExistV2(absoluteBucket)) {
+			throw new NotFoundException();
+		}
+
+		return Response.ok().build();
 	}
 
 	@POST
