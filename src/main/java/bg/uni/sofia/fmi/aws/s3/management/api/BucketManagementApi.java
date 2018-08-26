@@ -3,6 +3,7 @@ package bg.uni.sofia.fmi.aws.s3.management.api;
 import static bg.uni.sofia.fmi.aws.s3.management.api.Utils.buildAbsoluteBucket;
 import static javax.ws.rs.core.Response.status;
 import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
+import static javax.ws.rs.core.Response.Status.CREATED;
 import static javax.ws.rs.core.Response.Status.NOT_FOUND;
 import static javax.ws.rs.core.Response.Status.OK;
 
@@ -44,7 +45,7 @@ public class BucketManagementApi {
 		}
 
 		client.createBucket(absoluteBucket);
-		return status(OK).build();
+		return status(CREATED).build();
 	}
 
 	@DELETE
