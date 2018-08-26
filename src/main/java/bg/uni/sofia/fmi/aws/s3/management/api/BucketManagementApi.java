@@ -1,11 +1,13 @@
 package bg.uni.sofia.fmi.aws.s3.management.api;
 
 import static bg.uni.sofia.fmi.aws.s3.management.api.Utils.buildAbsoluteBucket;
+import static javax.ws.rs.core.Response.status;
+import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
+import static javax.ws.rs.core.Response.Status.NOT_FOUND;
+import static javax.ws.rs.core.Response.Status.OK;
 
-import javax.ws.rs.BadRequestException;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.HEAD;
-import javax.ws.rs.NotFoundException;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -27,10 +29,10 @@ public class BucketManagementApi {
 	public Response isExistingBucket(@PathParam("bucket") String bucket) {
 		String absoluteBucket = buildAbsoluteBucket(bucket);
 		if (!client.doesBucketExistV2(absoluteBucket)) {
-			throw new NotFoundException();
+			return status(NOT_FOUND).build();
 		}
 
-		return Response.ok().build();
+		return status(OK).build();
 	}
 
 	@POST
@@ -38,11 +40,11 @@ public class BucketManagementApi {
 	public Response createBucket(@PathParam("bucket") String bucket) {
 		String absoluteBucket = buildAbsoluteBucket(bucket);
 		if (client.doesBucketExistV2(bucket)) {
-			throw new BadRequestException();
+			return status(BAD_REQUEST).build();
 		}
 
 		client.createBucket(absoluteBucket);
-		return Response.ok().build();
+		return status(OK).build();
 	}
 
 	@DELETE
@@ -50,10 +52,10 @@ public class BucketManagementApi {
 	public Response deleteEmptyBucket(@PathParam("bucket") String bucket) {
 		String absoluteBucket = buildAbsoluteBucket(bucket);
 		if (!client.doesBucketExistV2(absoluteBucket)) {
-			throw new NotFoundException();
+			return status(NOT_FOUND).build();
 		}
 
 		client.deleteBucket(absoluteBucket);
-		return Response.ok().build();
+		return status(OK).build();
 	}
 }
