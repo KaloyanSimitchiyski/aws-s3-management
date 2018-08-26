@@ -31,4 +31,4 @@
 
 ```DELETE /files/{folderName}/{fileName}```
 * ```404 NOT FOUND``` - file does not exist
-* ```200 OK``` - object successfully deleted
+* ```200 OK``` - file successfully deleted
