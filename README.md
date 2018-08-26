@@ -6,7 +6,7 @@
 * ```404 NOT FOUND``` - bucket does not exist
 * ```200 OK``` - bucket exists
 
-````POST /buckets/{bucketName}``` - create a bucket
+```POST /buckets/{bucketName}``` - create a bucket
 * ```400 BAD REQUEST``` - bucket already exists
 * ```201 CREATED``` - bucket successfully created
 
