@@ -70,6 +70,10 @@ public class FileManagementApi {
 	@Produces(APPLICATION_JSON)
 	public Response getFileList(@PathParam("folder") String folder) {
 		try {
+			if (!client.doesObjectExist(rootBucket, toFolder(folder))) {
+				return status(NOT_FOUND).build();
+			}
+
 			ListObjectsV2Request request = new ListObjectsV2Request() //
 					.withBucketName(rootBucket) //
 					.withPrefix(toFolder(folder));
@@ -92,34 +96,26 @@ public class FileManagementApi {
 	@Consumes(MULTIPART_FORM_DATA)
 	public Response uploadFile(@FormDataParam("file") InputStream fileData,
 			@FormDataParam("file") FormDataContentDisposition fileDetails, @PathParam("folder") String folder) {
-		try {
-			ObjectMetadata metadata = new ObjectMetadata();
-			metadata.setUserMetadata(fileDetails.getParameters());
-			client.putObject(rootBucket, toAbsolutePath(folder, fileDetails.getFileName()), fileData, metadata);
-
-			return status(CREATED).build();
-		} catch (IllegalArgumentException e) {
+		if (!client.doesObjectExist(rootBucket, toFolder(folder))) {
 			return status(BAD_REQUEST).build();
-		} catch (RuntimeException e) {
-			return status(INTERNAL_SERVER_ERROR).build();
 		}
+
+		ObjectMetadata metadata = new ObjectMetadata();
+		metadata.setUserMetadata(fileDetails.getParameters());
+		client.putObject(rootBucket, toAbsolutePath(folder, fileDetails.getFileName()), fileData, metadata);
+
+		return status(CREATED).build();
 	}
 
 	@DELETE
 	@Path("{folder}/{file}")
 	public Response deleteFile(@PathParam("folder") String folder, @PathParam("file") String file) {
-		try {
-			String absolutePath = toAbsolutePath(folder, file);
-			if (!client.doesObjectExist(rootBucket, absolutePath)) {
-				return status(NOT_FOUND).build();
-			}
-
-			client.deleteObject(rootBucket, absolutePath);
-			return status(OK).build();
-		} catch (IllegalArgumentException e) {
-			return status(BAD_REQUEST).build();
-		} catch (RuntimeException e) {
-			return status(INTERNAL_SERVER_ERROR).build();
+		String absolutePath = toAbsolutePath(folder, file);
+		if (!client.doesObjectExist(rootBucket, absolutePath)) {
+			return status(NOT_FOUND).build();
 		}
+
+		client.deleteObject(rootBucket, absolutePath);
+		return status(OK).build();
 	}
 }
