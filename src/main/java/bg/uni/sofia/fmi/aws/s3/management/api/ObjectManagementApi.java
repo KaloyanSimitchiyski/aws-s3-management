@@ -75,7 +75,7 @@ public class ObjectManagementApi {
 
 			return status(OK).entity(objectNames).build();
 		} catch (IllegalArgumentException e) {
-			return status(BAD_REQUEST).build();
+			return status(NOT_FOUND).build();
 		} catch (RuntimeException e) {
 			return status(INTERNAL_SERVER_ERROR).build();
 		}
