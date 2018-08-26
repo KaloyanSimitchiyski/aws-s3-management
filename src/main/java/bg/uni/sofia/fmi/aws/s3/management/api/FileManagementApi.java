@@ -1,6 +1,7 @@
 package bg.uni.sofia.fmi.aws.s3.management.api;
 
-import static bg.uni.sofia.fmi.aws.s3.management.api.Utils.buildAbsoluteBucket;
+import static bg.uni.sofia.fmi.aws.s3.management.api.Utils.toAbsolutePath;
+import static bg.uni.sofia.fmi.aws.s3.management.api.Utils.toFolder;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 import static javax.ws.rs.core.MediaType.APPLICATION_OCTET_STREAM;
 import static javax.ws.rs.core.MediaType.MULTIPART_FORM_DATA;
@@ -28,30 +29,34 @@ import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 
 import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.ListObjectsV2Request;
+import com.amazonaws.services.s3.model.ListObjectsV2Result;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.services.s3.model.S3ObjectSummary;
 
-@Path("objects")
-public class ObjectManagementApi {
+@Path("files")
+public class FileManagementApi {
 
 	private final AmazonS3 client;
+	private final String rootBucket;
 
-	public ObjectManagementApi(AmazonS3 client) {
+	public FileManagementApi(AmazonS3 client, String rootBucket) {
 		this.client = client;
+		this.rootBucket = rootBucket;
 	}
 
 	@GET
-	@Path("{bucket}/{object}")
+	@Path("{folder}/{file}")
 	@Produces(APPLICATION_OCTET_STREAM)
-	Response download(@PathParam("bucket") String bucket, @PathParam("object") String object) {
+	public Response download(@PathParam("folder") String folder, @PathParam("file") String file) {
 		try {
-			String absoluteBucket = buildExistingBucket(bucket);
-			if (!isExistingObject(absoluteBucket, object)) {
+			String absolutePath = toAbsolutePath(folder, file);
+			if (!client.doesObjectExist(rootBucket, toAbsolutePath(folder, file))) {
 				return status(NOT_FOUND).build();
 			}
 
-			S3Object s3Object = client.getObject(absoluteBucket, object);
+			S3Object s3Object = client.getObject(rootBucket, absolutePath);
 			return status(OK).entity(s3Object.getObjectContent()).build();
 		} catch (IllegalArgumentException e) {
 			return status(BAD_REQUEST).build();
@@ -61,19 +66,20 @@ public class ObjectManagementApi {
 	}
 
 	@GET
-	@Path("{bucket}")
+	@Path("{folder}")
 	@Produces(APPLICATION_JSON)
-	Response getFileList(@PathParam("bucket") String bucket) {
+	public Response getFileList(@PathParam("folder") String folder) {
 		try {
-			String absoluteBucket = buildExistingBucket(bucket);
+			ListObjectsV2Request request = new ListObjectsV2Request() //
+					.withBucketName(rootBucket) //
+					.withPrefix(toFolder(folder));
 
-			List<S3ObjectSummary> summaries = client.listObjects(absoluteBucket) //
-					.getObjectSummaries();
-			List<String> objectNames = summaries.stream() //
+			ListObjectsV2Result result = client.listObjectsV2(request);
+			List<String> fileNames = result.getObjectSummaries().stream() //
 					.map(S3ObjectSummary::getKey) //
 					.collect(Collectors.toList());
 
-			return status(OK).entity(objectNames).build();
+			return status(OK).entity(fileNames).build();
 		} catch (IllegalArgumentException e) {
 			return status(NOT_FOUND).build();
 		} catch (RuntimeException e) {
@@ -82,16 +88,14 @@ public class ObjectManagementApi {
 	}
 
 	@POST
-	@Path("{bucket}")
+	@Path("{folder}")
 	@Consumes(MULTIPART_FORM_DATA)
-	Response uploadFile(@FormDataParam("object") InputStream objectData,
-			@FormDataParam("object") FormDataContentDisposition objectDetails, @PathParam("bucket") String bucket) {
+	public Response uploadFile(@FormDataParam("file") InputStream fileData,
+			@FormDataParam("file") FormDataContentDisposition fileDetails, @PathParam("folder") String folder) {
 		try {
-			String absoluteBucket = buildExistingBucket(bucket);
-
 			ObjectMetadata metadata = new ObjectMetadata();
-			metadata.setUserMetadata(objectDetails.getParameters());
-			client.putObject(absoluteBucket, objectDetails.getFileName(), objectData, metadata);
+			metadata.setUserMetadata(fileDetails.getParameters());
+			client.putObject(rootBucket, toAbsolutePath(folder, fileDetails.getFileName()), fileData, metadata);
 
 			return status(CREATED).build();
 		} catch (IllegalArgumentException e) {
@@ -102,31 +106,20 @@ public class ObjectManagementApi {
 	}
 
 	@DELETE
-	@Path("{bucket}/{object}")
-	Response deleteFile(@PathParam("bucket") String bucket, @PathParam("object") String object) {
+	@Path("{folder}/{file}")
+	public Response deleteFile(@PathParam("folder") String folder, @PathParam("file") String file) {
 		try {
-			String absoluteBucket = buildExistingBucket(bucket);
-			isExistingObject(absoluteBucket, object);
+			String absolutePath = toAbsolutePath(folder, file);
+			if (!client.doesObjectExist(rootBucket, absolutePath)) {
+				return status(NOT_FOUND).build();
+			}
 
-			client.deleteObject(absoluteBucket, object);
+			client.deleteObject(rootBucket, absolutePath);
 			return status(OK).build();
 		} catch (IllegalArgumentException e) {
 			return status(BAD_REQUEST).build();
 		} catch (RuntimeException e) {
 			return status(INTERNAL_SERVER_ERROR).build();
 		}
-	}
-
-	private String buildExistingBucket(String bucket) {
-		String absoluteBucket = buildAbsoluteBucket(bucket);
-		if (!client.doesBucketExistV2(absoluteBucket)) {
-			throw new IllegalArgumentException();
-		}
-
-		return absoluteBucket;
-	}
-
-	private boolean isExistingObject(String bucket, String object) {
-		return !client.doesObjectExist(bucket, object);
 	}
 }
