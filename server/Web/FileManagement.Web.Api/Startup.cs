@@ -11,7 +11,7 @@ namespace FileManagement.Web.Api
     {
         public void Configuration(IAppBuilder app)
         {
-            ConfigureAuth(app);
+            this.ConfigureAuth(app);
 
             var httpConfig = new HttpConfiguration();
             WebApiConfig.Register(httpConfig);
