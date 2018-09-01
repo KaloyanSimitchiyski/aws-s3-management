@@ -4,6 +4,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 
 using FileManagement.Data.Models;
+using FileManagement.Web.Api.Configs;
 
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;

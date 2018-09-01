@@ -54,6 +54,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FileManagementDbContext.cs" />
+    <Compile Include="Migrations\201809011407258_Initial.cs" />
+    <Compile Include="Migrations\201809011407258_Initial.Designer.cs">
+      <DependentUpon>201809011407258_Initial.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -65,6 +70,11 @@
       <Project>{EA574E83-B710-42AA-8663-A7F3AEFF6F9A}</Project>
       <Name>FileManagement.Data.Models</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201809011407258_Initial.resx">
+      <DependentUpon>201809011407258_Initial.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

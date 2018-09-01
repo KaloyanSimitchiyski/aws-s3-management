@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Http;
 
 using FileManagement.Data.Models;
+using FileManagement.Web.Api.Configs;
 using FileManagement.Web.Api.Models.Account;
 using FileManagement.Web.Api.Infrastructure.Providers;
 using FileManagement.Web.Api.Infrastructure.Results;

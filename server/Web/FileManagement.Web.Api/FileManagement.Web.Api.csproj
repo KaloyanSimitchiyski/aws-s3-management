@@ -178,6 +178,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Configs\DatabaseConfig.cs" />
     <Compile Include="Configs\IdentityConfig.cs" />
     <Compile Include="Configs\Startup.Auth.cs" />
     <Compile Include="Configs\WebApiConfig.cs" />
