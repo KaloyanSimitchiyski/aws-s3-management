@@ -1,7 +1,7 @@
 ﻿using System.Web.Http;
 using Microsoft.Owin.Security.OAuth;
 
-namespace FileManagement.Web.Api
+namespace FileManagement.Web.Api.Configs
 {
     public static class WebApiConfig
     {

@@ -1,6 +1,7 @@
 ﻿using System;
 
 using FileManagement.Data;
+using FileManagement.Web.Api.Configs;
 using FileManagement.Web.Api.Infrastructure.Providers;
 
 using Microsoft.AspNet.Identity;
