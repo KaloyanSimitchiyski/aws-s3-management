@@ -10,7 +10,7 @@ using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.OAuth;
 
-namespace FileManagement.Web.Api.Providers
+namespace FileManagement.Web.Api.Infrastructure.Providers
 {
     public class ApplicationOAuthProvider : OAuthAuthorizationServerProvider
     {

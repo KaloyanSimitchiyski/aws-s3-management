@@ -9,8 +9,8 @@ using System.Web.Http;
 
 using FileManagement.Data.Models;
 using FileManagement.Web.Api.Models.Account;
-using FileManagement.Web.Api.Providers;
-using FileManagement.Web.Api.Results;
+using FileManagement.Web.Api.Infrastructure.Providers;
+using FileManagement.Web.Api.Infrastructure.Results;
 
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
