@@ -3,6 +3,7 @@
     public static class GlobalConstants
     {
         public const string ConnectionStringKey = "DefaultConnection";
+        public const string SecretKey = "SecretKey";
         public const string MigrationsAssembly = "FileManagement.Web.Api";
 
         // User constants
@@ -14,5 +15,12 @@
         public const int MinNameLength = 2;
         public const int MaxNameLength = 30;
         public const int PasswordRequiredLength = 8;
+
+        // JWT constants
+        public const string PolicyName = "ApiUser";
+        public const int TokenValidTimeInMinutes = 120;
+        public const string Rol = "rol";
+        public const string Id = "id";
+        public const string ApiAccess = "api_access";
     }
 }

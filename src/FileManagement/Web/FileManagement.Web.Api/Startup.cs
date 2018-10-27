@@ -1,17 +1,25 @@
-﻿using AutoMapper;
+﻿using System;
+using System.Text;
 
+using AutoMapper;
+
+using FileManagement.Web.Api.Auth;
+using FileManagement.Web.Api.Auth.Contracts;
 using FileManagement.Web.Api.Common;
 using FileManagement.Web.Api.Data;
 using FileManagement.Web.Api.Entities;
+using FileManagement.Web.Api.Models;
 
 using FluentValidation.AspNetCore;
 
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 
 namespace FileManagement.Web.Api
 {
@@ -31,6 +39,56 @@ namespace FileManagement.Web.Api
             services.AddDbContext<FileManagementDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString(GlobalConstants.ConnectionStringKey),
                     b => b.MigrationsAssembly(GlobalConstants.MigrationsAssembly)));
+
+            services.AddSingleton<IJwtFactory, JwtFactory>();
+
+            // jwt wire up
+            // Get options from app settings
+            var jwtAppSettingOptions = Configuration.GetSection(nameof(JwtIssuerOptions));
+            var secretKey = jwtAppSettingOptions[GlobalConstants.SecretKey];
+            var signingKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(secretKey));
+
+            // Configure JwtIssuerOptions
+            services.Configure<JwtIssuerOptions>(options =>
+            {
+                options.Issuer = jwtAppSettingOptions[nameof(JwtIssuerOptions.Issuer)];
+                options.Audience = jwtAppSettingOptions[nameof(JwtIssuerOptions.Audience)];
+                options.SigningCredentials = new SigningCredentials(signingKey, SecurityAlgorithms.HmacSha256);
+            });
+
+            var tokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuer = true,
+                ValidIssuer = jwtAppSettingOptions[nameof(JwtIssuerOptions.Issuer)],
+
+                ValidateAudience = true,
+                ValidAudience = jwtAppSettingOptions[nameof(JwtIssuerOptions.Audience)],
+
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = signingKey,
+
+                RequireExpirationTime = false,
+                ValidateLifetime = true,
+                ClockSkew = TimeSpan.Zero
+            };
+
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+
+            }).AddJwtBearer(configureOptions =>
+            {
+                configureOptions.ClaimsIssuer = jwtAppSettingOptions[nameof(JwtIssuerOptions.Issuer)];
+                configureOptions.TokenValidationParameters = tokenValidationParameters;
+                configureOptions.SaveToken = true;
+            });
+
+            // api user claim policy
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy(GlobalConstants.PolicyName, policy => policy.RequireClaim(GlobalConstants.Rol, GlobalConstants.ApiAccess));
+            });
 
             // Add Identity
             var builder = services.AddIdentityCore<AppUser>(o =>
