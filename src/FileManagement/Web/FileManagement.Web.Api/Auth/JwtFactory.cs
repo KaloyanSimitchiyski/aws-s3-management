@@ -29,7 +29,6 @@ namespace FileManagement.Web.Api.Auth
                 new Claim(JwtRegisteredClaimNames.Sub, userName),
                 new Claim(JwtRegisteredClaimNames.Jti, await this._jwtOptions.JtiGenerator()),
                 new Claim(JwtRegisteredClaimNames.Iat, ToUnixEpochDate(this._jwtOptions.IssuedAt).ToString(), ClaimValueTypes.Integer64),
-                identity.FindFirst(GlobalConstants.Rol),
                 identity.FindFirst(GlobalConstants.Id)
             };
 
@@ -50,8 +49,7 @@ namespace FileManagement.Web.Api.Auth
         {
             return new ClaimsIdentity(new GenericIdentity(userName, "Token"), new[]
             {
-                new Claim(GlobalConstants.Id, id),
-                new Claim(GlobalConstants.Rol, GlobalConstants.ApiAccess)
+                new Claim(GlobalConstants.Id, id)
             });
         }
 

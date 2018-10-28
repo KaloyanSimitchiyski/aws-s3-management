@@ -26,7 +26,7 @@ namespace FileManagement.Web.Api.Common
             {
                 id = identity.Claims.Single(c => c.Type == GlobalConstants.Id).Value,
                 auth_token = await jwtFactory.GenerateEncodedToken(username, identity),
-                expires_in = (int) jwtOptions.ValidFor.TotalSeconds,
+                expires_in = (int) jwtOptions.ValidFor.TotalMinutes,
                 user_folder = folder.ToString()
             };
 

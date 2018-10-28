@@ -84,12 +84,6 @@ namespace FileManagement.Web.Api
                 configureOptions.SaveToken = true;
             });
 
-            // api user claim policy
-            services.AddAuthorization(options =>
-            {
-                options.AddPolicy(GlobalConstants.PolicyName, policy => policy.RequireClaim(GlobalConstants.Rol, GlobalConstants.ApiAccess));
-            });
-
             // Add Identity
             var builder = services.AddIdentityCore<AppUser>(o =>
             {

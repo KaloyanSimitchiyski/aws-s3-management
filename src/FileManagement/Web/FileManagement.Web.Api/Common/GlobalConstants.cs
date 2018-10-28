@@ -18,10 +18,7 @@
         public const int PasswordRequiredLength = 8;
 
         // JWT constants
-        public const string PolicyName = "ApiUser";
         public const int TokenValidTimeInMinutes = 120;
-        public const string Rol = "rol";
         public const string Id = "id";
-        public const string ApiAccess = "api_access";
     }
 }
