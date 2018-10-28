@@ -10,6 +10,7 @@
         public const string AccountCreatedMessage = "Account created";
         public const string EmailErrorMessage = "The passed email is not valid";
         public const string PasswordErrorMessage = "Password cannot be empty";
+        public const string PasswordLengthErrorMessage = "Password cannot be less than 8 symbols";
         public const string NameErrorMessage = "The passed name is not valid";
 
         public const int MinNameLength = 2;

@@ -28,18 +28,12 @@ namespace FileManagement.Web.Api.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromBody]RegistrationViewModel viewModel)
         {
-            if (!this.ModelState.IsValid)
-            {
-                return this.BadRequest(this.ModelState);
-            }
+            if (!this.ModelState.IsValid) return this.BadRequest(this.ModelState);
 
             var userIdentity = this._mapper.Map<AppUser>(viewModel);
             var result = await this._userManager.CreateAsync(userIdentity, viewModel.Password);
 
-            if (!result.Succeeded)
-            {
-                return new BadRequestObjectResult(Errors.AddErrorsToModelState(result, this.ModelState));
-            }
+            if (!result.Succeeded) return new BadRequestObjectResult(Errors.AddErrorsToModelState(result, this.ModelState));
 
             return new OkObjectResult(GlobalConstants.AccountCreatedMessage);
         }
