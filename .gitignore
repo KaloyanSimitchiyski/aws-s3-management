@@ -4,3 +4,10 @@ obj/
 
 # Visual Studio cache/options directory
 .vs/
+
+# Maven build directory
+target/
+
+# Eclipse configuration files
+.classpath
+.settings
