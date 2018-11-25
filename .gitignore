@@ -2,8 +2,14 @@
 bin/
 obj/
 
+# WWW ROOT Directory
+wwwroot/
+
 # Visual Studio cache/options directory
 .vs/
+
+# Node Modules
+node_modules/
 
 # Maven build directory
 target/
