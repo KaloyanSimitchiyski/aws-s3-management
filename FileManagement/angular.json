@@ -45,6 +45,7 @@
               "ClientApp/assets"
             ],
             "styles": [
+			  "node_modules/bootstrap/dist/css/bootstrap.min.css",
               "ClientApp/styles.css"
             ],
             "scripts": []
@@ -101,6 +102,7 @@
             "tsConfig": "ClientApp/tsconfig.spec.json",
             "karmaConfig": "ClientApp/karma.conf.js",
             "styles": [
+			  "node_modules/bootstrap/dist/css/bootstrap.min.css",
               "ClientApp/styles.css"
             ],
             "scripts": [],

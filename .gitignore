@@ -11,6 +11,8 @@ wwwroot/
 # Node Modules
 node_modules/
 
+package-lock.json
+
 # Maven build directory
 target/
 
