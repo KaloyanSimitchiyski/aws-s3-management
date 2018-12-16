@@ -3,4 +3,6 @@ body {
     background-image: url("./assets/imgs/file-management.jpg");
     background-size: cover;
     background-repeat: no-repeat;
+
+    padding-top: 65px;
 }

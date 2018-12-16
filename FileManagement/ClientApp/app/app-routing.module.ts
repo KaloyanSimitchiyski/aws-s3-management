@@ -7,6 +7,11 @@ const routes: Routes = [
     {
         path: '',
         component: AppComponent
+    },
+
+    {
+        path: 'account',
+        loadChildren: './account/account.module#AccountModule'
     }
 ];
 
