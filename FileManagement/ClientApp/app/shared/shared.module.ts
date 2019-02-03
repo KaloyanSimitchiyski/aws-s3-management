@@ -5,11 +5,12 @@ import { HttpModule } from '@angular/http';
 import { NavigationComponent } from './navigation/navigation.component';
 
 import { UserService } from './services/user.service';
+import { FolderService } from './services/folder.service';
 
 @NgModule({
   imports: [ CommonModule, HttpModule ],
   declarations: [ NavigationComponent ],
-  providers: [ UserService ],
+  providers: [ UserService, FolderService ],
   exports : [ NavigationComponent ]
 })
 export class SharedModule { }
