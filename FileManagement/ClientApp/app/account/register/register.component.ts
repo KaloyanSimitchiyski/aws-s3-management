@@ -15,8 +15,15 @@ export class RegisterComponent {
   constructor(private userService: UserService, private router: Router) {
   }
 
-  public registerUser(user: UserRegistration) {
+  public registerUser(formValue: any) {
     this.errors = '';
+
+    const user: UserRegistration = {
+      firstName: formValue.form.value.firstName,
+      lastName: formValue.form.value.lastName,
+      email: formValue.form.value.email,
+      password: formValue.form.value.password
+    };
 
     this.userService.register(user)
       .subscribe(result => {

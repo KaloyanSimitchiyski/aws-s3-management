@@ -98,6 +98,7 @@ namespace FileManagement
             builder.AddEntityFrameworkStores<FileManagementDbContext>().AddDefaultTokenProviders();
 
             services.AddAutoMapper();
+			services.AddCors();
             services.AddMvc().AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<Startup>());
         }
 
@@ -109,6 +110,10 @@ namespace FileManagement
                 app.UseDeveloperExceptionPage();
             }
 
+			app.UseCors(builder =>
+				builder.WithOrigins("http://localhost:4200")
+				        .AllowAnyMethod()
+				        .AllowAnyHeader());
             app.UseAuthentication();
             app.UseDefaultFiles();
             app.UseStaticFiles();

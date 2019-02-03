@@ -13,6 +13,9 @@ node_modules/
 
 package-lock.json
 
+# compiled output
+FileManagement/dist
+
 # Maven build directory
 target/
 
