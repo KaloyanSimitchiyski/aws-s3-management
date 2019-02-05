@@ -1,6 +1,0 @@
-bg/uni/sofia/fmi/aws/s3/management/deploy/S3ManagementApplication.class
-bg/uni/sofia/fmi/aws/s3/management/api/Utils.class
-bg/uni/sofia/fmi/aws/s3/management/api/FileManagementApi.class
-bg/uni/sofia/fmi/aws/s3/management/api/FolderManagementApi.class
-bg/uni/sofia/fmi/aws/s3/management/env/EnvironmentVariable.class
-bg/uni/sofia/fmi/aws/s3/management/env/EnvironmentVariableReader.class

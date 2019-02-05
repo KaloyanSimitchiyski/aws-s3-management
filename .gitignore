@@ -11,3 +11,7 @@ target/
 # Eclipse configuration files
 .classpath
 .settings
+
+# IntelliJ configuration files
+.idea/
+*.iml
