@@ -26,7 +26,7 @@ export class LoginComponent {
     this.userService.login(user)
       .subscribe(result => {
         if (result) {
-          this.router.navigate(['/']);
+          this.router.navigate(['/folder']);
         }
       }, errors => this.errors = errors);
   }

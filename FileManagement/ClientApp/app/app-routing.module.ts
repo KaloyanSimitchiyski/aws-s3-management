@@ -2,11 +2,17 @@ import { Routes, RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
+import { FolderComponent } from './folder/folder.component';
 
 const routes: Routes = [
     {
         path: '',
         component: AppComponent
+    },
+
+    {
+        path: 'folder',
+        component: FolderComponent
     },
 
     {

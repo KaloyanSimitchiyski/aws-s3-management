@@ -1,0 +1,41 @@
+<div class="row">
+    <div class="col-md-12">
+        <div *ngIf="message" class="alert alert-info" role="alert">
+            <strong>{{message}}</strong>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <form class="form-horizontal">
+            <div class="form-group text-center">
+                <button (click)="searchFolder()" type="submit" class="btn btn-primary">Search for Folder</button> 
+            </div> 
+        </form>
+    </div>
+
+    <div class="col-md-4">
+        <form class="form-horizontal">
+            <div class="form-group text-center">
+                <button (click)="createFolder()" type="submit" class="btn btn-success" >Create Folder</button> 
+            </div>
+        </form>
+    </div>
+    
+    <div class="col-md-4">
+        <form class="form-horizontal">
+            <div class="form-group text-center">
+                <button (click)="deleteFolder()" type="submit" class="btn btn-danger">Delete Folder</button> 
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div *ngIf="errors" class="alert alert-danger" role="alert">
+            <strong>Oops!</strong> {{errors}}
+        </div>
+    </div>
+</div>
