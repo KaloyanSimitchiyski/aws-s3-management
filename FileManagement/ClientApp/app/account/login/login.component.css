@@ -1,0 +1,11 @@
+p {
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 20px;
+    margin-left: 35px;
+}
+
+form {
+    background: white;
+    border: 10px solid white;
+    border-radius: 25px;
+}

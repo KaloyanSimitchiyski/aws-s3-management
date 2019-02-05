@@ -1,0 +1,32 @@
+<header>
+  <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+
+    <a class="navbar-brand" href="/">File Management</a>
+
+    <button class="navbar-toggler d-lg-none" type="button" data-toggle="collapse" 
+            data-target="#navbars" aria-controls="navbars" 
+            aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbars">
+      <ul *ngIf="status" class="nav navbar-nav ml-auto">
+          <li class="nav-item">
+              <a class="nav-link" href="/folder">My Folders</a>
+          </li>
+          <li class="nav-item">
+              <a class="nav-link" (click)="logout()" href="#">Log Off</a>
+          </li>
+      </ul>
+
+      <ul *ngIf="!status" class="nav navbar-nav ml-auto">
+          <li class="nav-item">
+              <a class="nav-link" href="/account/register">Register</a>
+          </li>
+          <li class="nav-item">
+              <a class="nav-link" href="/account/login">Login</a>
+          </li>
+      </ul>
+    </div>
+  </nav>
+</header>
