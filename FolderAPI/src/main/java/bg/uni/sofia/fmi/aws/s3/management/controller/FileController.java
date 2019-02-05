@@ -48,12 +48,12 @@ public class FileController {
         }
     }
 
-    @GetMapping(value = "folders/{folder}", produces = APPLICATION_JSON_VALUE)
+    @GetMapping(value = "folders/{folder}/files", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<List<String>> getFileList(@PathVariable("folder") String folder) {
         return ok(fileService.getAvailableFileNames(folder));
     }
 
-    @PostMapping("folders/{folder}")
+    @PostMapping("folders/{folder}/files")
     public ResponseEntity uploadFile(@PathVariable("folder") String folder, @RequestParam("file") MultipartFile file) {
         try {
             fileService.uploadFile(folder, file.getOriginalFilename(), file.getInputStream(), emptyMap());

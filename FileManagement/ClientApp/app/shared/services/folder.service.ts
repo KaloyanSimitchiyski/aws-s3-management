@@ -6,7 +6,7 @@ import { map } from 'rxjs/operators';
 
 @Injectable()
 export class FolderService {
-    private baseUrl = 'http://ec2-18-197-178-192.eu-central-1.compute.amazonaws.com:8080/aws-s3-management/services';
+    private baseUrl = 'http://localhost:8080';
 
     constructor(private http: Http) {
     }
@@ -16,11 +16,7 @@ export class FolderService {
 
         return this.http.head(this.baseUrl + `/folders/${folderName}`)
             .pipe(map(res => {
-                if (res.status.toString() === '200') {
-                    return true;
-                } else {
-                    return false;
-                }
+                return res.status.toString() === '200';
             }));
     }
 
@@ -29,11 +25,7 @@ export class FolderService {
 
         return this.http.post(this.baseUrl + `/folders/${folderName}`, {})
             .pipe(map(res => {
-                if (res.status.toString() === '201') {
-                    return true;
-                } else {
-                    return false;
-                }
+                return res.status.toString() === '201';
             }));
     }
 
@@ -42,11 +34,7 @@ export class FolderService {
 
         return this.http.delete(this.baseUrl + `/folders/${folderName}`)
             .pipe(map(res => {
-                if (res.status.toString() === '200') {
-                    return true;
-                } else {
-                    return false;
-                }
+                return res.status.toString() === '200';
             }));
     }
 }
