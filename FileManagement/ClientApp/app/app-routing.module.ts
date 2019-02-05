@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
 import { FolderComponent } from './folder/folder.component';
+import { FileComponent } from './file/file.component';
 
 const routes: Routes = [
     {
@@ -13,6 +14,11 @@ const routes: Routes = [
     {
         path: 'folder',
         component: FolderComponent
+    },
+
+    {
+        path: 'file',
+        component: FileComponent
     },
 
     {

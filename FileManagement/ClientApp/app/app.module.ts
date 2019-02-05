@@ -9,6 +9,7 @@ import { SharedModule } from './shared/shared.module';
 
 import { AppComponent } from './app.component';
 import { FolderComponent } from './folder/folder.component';
+import { FileComponent } from './file/file.component';
 
 @NgModule({
   imports: [
@@ -18,7 +19,7 @@ import { FolderComponent } from './folder/folder.component';
     AppRoutingModule,
     SharedModule
   ],
-  declarations: [ AppComponent, FolderComponent ],
+  declarations: [ AppComponent, FolderComponent, FileComponent ],
   bootstrap: [ AppComponent ]
 })
 export class AppModule { }

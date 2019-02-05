@@ -1,0 +1,30 @@
+<div class="row">
+    <div class="col-md-12">
+        <div class="form-group">
+            <label for="file">Choose File to Upload</label>
+            <input type="file" id="file" (change)="handleFileInput($event.target.files)">
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div *ngFor="let fileName of files">
+        <div class="col-md-4">
+            <p>
+                {{ fileName }}
+            </p>
+
+            <form class="form-horizontal">
+                <div class="form-group text-center">
+                    <button (click)="downloadFile(fileName)" type="submit" class="btn btn-success">Download File</button> 
+                </div> 
+            </form>
+
+            <form class="form-horizontal">
+                <div class="form-group text-center">
+                        <button (click)="deleteFile(fileName)" type="submit" class="btn btn-danger">Delete File</button> 
+                </div> 
+            </form>
+        </div>
+    </div>
+</div>
