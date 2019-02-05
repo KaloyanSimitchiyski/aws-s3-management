@@ -29,7 +29,7 @@ public class FolderController {
         return ok().build();
     }
 
-    @PutMapping("{folder}")
+    @PostMapping("{folder}")
     public ResponseEntity createFolder(@PathVariable("folder") String folder) {
         if (folderService.isExistingFolder(folder)) {
             return notFound().build();
