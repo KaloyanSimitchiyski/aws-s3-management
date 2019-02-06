@@ -31,7 +31,7 @@ export class FileService {
           })
           .pipe(map(res => {
                 return res.blob();
-            }));
+          }));
     }
 
     public uploadFile(file: File): Observable<boolean> {

@@ -6,11 +6,12 @@ import { NavigationComponent } from './navigation/navigation.component';
 
 import { UserService } from './services/user.service';
 import { FolderService } from './services/folder.service';
+import { FileService } from './services/file.service';
 
 @NgModule({
   imports: [ CommonModule, HttpModule ],
   declarations: [ NavigationComponent ],
-  providers: [ UserService, FolderService ],
+  providers: [ UserService, FolderService, FileService ],
   exports : [ NavigationComponent ]
 })
 export class SharedModule { }

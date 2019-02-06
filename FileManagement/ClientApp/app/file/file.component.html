@@ -2,7 +2,7 @@
     <div class="col-md-12">
         <div class="form-group">
             <label for="file">Choose File to Upload</label>
-            <input type="file" id="file" (change)="handleFileInput($event.target.files)">
+            <input type="file" id="file" (change)="uploadFile($event.target.files)">
         </div>
     </div>
 </div>
@@ -25,6 +25,14 @@
                         <button (click)="deleteFile(fileName)" type="submit" class="btn btn-danger">Delete File</button> 
                 </div> 
             </form>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div *ngIf="errors" class="alert alert-danger" role="alert">
+            <strong>Oops!</strong> {{errors}}
         </div>
     </div>
 </div>
