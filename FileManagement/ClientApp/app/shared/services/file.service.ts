@@ -20,7 +20,7 @@ export class FileService {
             }));
     }
 
-    public downloadFile(fileName: string): Observable<Blob> {
+    public downloadFile(fileName: string): Observable<any> {
         const folderName = localStorage.getItem('user_folder');
         const headers = new Headers();
         headers.append('Content-Type', 'application/x-www-form-urlencoded');
@@ -28,10 +28,7 @@ export class FileService {
         return this.http.get(this.baseUrl + `/folders/${folderName}/files/${fileName}`, {
             responseType: ResponseContentType.Blob,
             headers: headers
-          })
-          .pipe(map(res => {
-                return res.blob();
-          }));
+          });
     }
 
     public uploadFile(file: File): Observable<boolean> {

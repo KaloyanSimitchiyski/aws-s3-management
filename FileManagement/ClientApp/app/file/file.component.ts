@@ -28,9 +28,19 @@ export class FileComponent implements OnInit {
     this.errors = '';
 
     this.fileService.downloadFile(fileName)
-      .subscribe(blob => {
-        if (blob) {
-        }
+      .subscribe(resp => {
+          const xhr = new XMLHttpRequest();
+          xhr.responseType = 'blob';
+          const a: any = document.createElement('a');
+          a.style = 'display: none';
+          document.body.appendChild(a);
+          const url = window.URL.createObjectURL(resp.blob());
+          a.href = url;
+          a.download = fileName;
+          a.click();
+          window.URL.revokeObjectURL(url);
+
+          window.open(url);
       }, errors => this.errors = errors);
   }
 
