@@ -30,6 +30,13 @@ export class FileComponent implements OnInit {
     this.fileService.downloadFile(fileName)
       .subscribe(blob => {
         if (blob) {
+          const element = document.createElement('a');
+
+          element.href = URL.createObjectURL(blob);
+          element.download = fileName;
+          document.body.appendChild(element);
+
+          element.click();
         }
       }, errors => this.errors = errors);
   }
